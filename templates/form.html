@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Instachallenge!</h2>
+<div class="list-details col-xs-offset-2">
+  <div class="well">
+    <br>  
+      <form action="/results" method="POST">
+<!-- should this be POST? -->
+
+          <div class="form-group">
+            <label for="hashtag">Pick an Hashtag:</label>
+           <input type="text" name="hashtag" class="form-control" id="InputHashtag" placeholder="Hashtag (phrase, don't include # sign)">
+          </div>
+
+        <!--   <div class="form-group">
+            <label for="startDate">Pick a Start Date:</label>
+           <input type="text" name="startDate" class="form-control" id="InputStartDate" placeholder="Start Date">
+          </div>
+
+          <div class="form-group">
+            <label for="endDate">Pick an End Date:</label>
+           <input type="text" name="endDate" class="form-control" id="InputEndDate" placeholder="End Date">
+          </div> -->
+          
+          <input type="submit">
+
+            </div>
+      </form>
+  </div>
+</div>
+{% endblock %}
+
+
+
+  
