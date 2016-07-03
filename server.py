@@ -2,12 +2,14 @@
 and collects submissions from Instagram """
 # Backend: Provide an API that accepts a POST to create a collection and GET to retrieve content 
 
-# from jinja2 import StrictUndefined
+from jinja2 import StrictUndefined
 
 from flask import Flask, render_template, request, flash, redirect, session
 from flask_debugtoolbar import DebugToolbarExtension
 
 from model import connect_to_db, db, Search
+
+import requests
 
 # from instagram import client, subscriptions
 
@@ -17,7 +19,7 @@ app = Flask(__name__)
 app.secret_key = "ABC"
 
 # Defining variable for Jinja2 to avoid it failing silently (this raises and error)
-# app.jinja_env.undefined = StrictUndefined
+app.jinja_env.undefined = StrictUndefined
 
 @app.route('/')
 def index():
@@ -28,6 +30,8 @@ def index():
 @app.route('/results', methods=["POST"])
 def show_results():
     """shows the results from the instagram endpoint url made with the inputted tag"""
+
+    # r = requests.get('https://api.github.com', auth=('user', 'pass'))
 
     tag = request.form.get("tag")
     start_date = request.form.get("start_date")
@@ -42,6 +46,8 @@ def show_results():
     # construct a string - concatenate the info that comes in
     endpoint = "https://api.instagram.com/v1/tags/" + tag + "/media/recent?access_token=272855367.b6f7db4.27aee70b486a4fd7b1b5546c1da0453d"
         # what's the python magic to call the URL and get the data back
+    r = requests.get(endpoint)
+    data = r.json()
 
     #how do I say get this data at the endpoint? 
     # and then take data from the end point which is a string and make it into a dict
@@ -63,8 +69,8 @@ def show_results():
     #         ig_cache_key=MTI4NDUwNjk2MDY1ODQyMDQ4NQ%3D%3D.2", "width": 320, "height": 320}, 
 
 
-    return redirect (endpoint)
-    # return render_template ("results.html", hashtag=hashtag, endpoint=endpoint)
+    # return redirect (endpoint)
+    return render_template ("results.html", data=data)
  
 if __name__ == "__main__":
 
