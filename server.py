@@ -11,6 +11,9 @@ from model import connect_to_db, db, Search
 
 import requests
 
+import json
+
+from datetime import datetime
 # from instagram import client, subscriptions
 
 app = Flask(__name__)
@@ -24,6 +27,7 @@ app.jinja_env.undefined = StrictUndefined
 @app.route('/')
 def index():
     """landing page where user can input tag for search"""
+    
     return render_template ("form.html")
 
 
@@ -31,46 +35,53 @@ def index():
 def show_results():
     """shows the results from the instagram endpoint url made with the inputted tag"""
 
-    # r = requests.get('https://api.github.com', auth=('user', 'pass'))
-
     tag = request.form.get("tag")
     start_date = request.form.get("start_date")
     end_date = request.form.get("end_date")
 
+    # adding search prameters to instas db
     new_search = Search(tag=tag,
                     start_date=start_date, 
                     end_date=end_date)
     db.session.add(new_search)
     db.session.commit()
 
-    # construct a string - concatenate the info that comes in
+    # concatenate the endpoint url and given hashtag to construct the url
     endpoint = "https://api.instagram.com/v1/tags/" + tag + "/media/recent?access_token=272855367.b6f7db4.27aee70b486a4fd7b1b5546c1da0453d"
-        # what's the python magic to call the URL and get the data back
+    
+    # use the python requests library to call the endpoint URL and get the data (type(r)='requests.models.Response')
     r = requests.get(endpoint)
-    data = r.json()
+    
+    # set the response to json (dict)
+    huge_data = r.json()
 
-    #how do I say get this data at the endpoint? 
-    # and then take data from the end point which is a string and make it into a dict
-    #then render the images found in the dict on the page?
+    # test_url work but only gets you the url at index [0]
+    test_url = huge_data['data'][0]['images']['standard_resolution']['url']
 
+    # I need to set up a for loop that loops over the huge_data dictionary 
+    # and gets the data for each individual image in the response list
+    
+    # urls = []
+    # for i in test_url:
+    
 
-    # "data": [{"attribution": null, 
-    #         "tags": ["poorhoffermobile"], 
-    #         "type": "image", 
-    #         "location": null, 
-    #         "comments": {"count": 0}, 
-    #         "filter": "Normal", 
-    #         "created_time": "1467345183", 
-    #         "link": "https://www.instagram.com/p/BHTfEZtj9MF/", 
-    #         "likes": {"count": 0}, 
-
-    #         "images": {"low_resolution": {"url": "https://scontent.cdninstagram.com/
-    #         t51.2885-15/s320x320/e35/11420918_132887830470925_116640902_n.jpg?
-    #         ig_cache_key=MTI4NDUwNjk2MDY1ODQyMDQ4NQ%3D%3D.2", "width": 320, "height": 320}, 
+    #     test_url = huge_data['data'][0]['images']['standard_resolution']['url']
+    #     urls.append(test_url)
+    # return urls
 
 
-    # return redirect (endpoint)
-    return render_template ("results.html", data=data)
+# def get_item_choices(category_names):
+#     """pass categories into copied items"""
+#     categories = []
+
+#     for category_name in category_names:
+#         if category_name:
+#             category = Category.query.filter_by(category_name=category_name).one()
+#             category_id = category.category_id   
+#             categories.append(category_id)
+#     return categories
+
+    return render_template ("results.html", tag=tag, test_url=test_url)
  
 if __name__ == "__main__":
 
