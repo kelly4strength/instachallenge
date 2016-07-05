@@ -16,6 +16,7 @@ class Search(db.Model):
     tag = db.Column(db.String(164), nullable=True)
     start_date = db.Column(db.String(80), nullable=True)
     end_date = db.Column(db.String(64), nullable=True)
+    
 
     def __repr__(self):
         """Provide helpful representation when printed."""

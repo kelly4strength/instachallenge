@@ -38,8 +38,10 @@ def show_results():
     tag = request.form.get("tag")
     start_date = request.form.get("start_date")
     end_date = request.form.get("end_date")
+# Need to take in start and end dates from users - Then turn them 
+# into unix time and then sort the results within those times
 
-    # adding search prameters to instas db
+    # adding search parameters to instas db
     new_search = Search(tag=tag,
                     start_date=start_date, 
                     end_date=end_date)
@@ -51,29 +53,28 @@ def show_results():
     
     # use the python requests library to call the endpoint URL and get the data (type(r)='requests.models.Response')
     r = requests.get(endpoint)
-# print r.status_code(look this up)
+    
+    # Confirming response is good (200)
+    print r.status_code
     
     # set the response to json (dict)
     huge_data = r.json()
 
-    # test_url work but only gets you the url at index [0]
-    #so I loop through huge_data['data'] for each index?
-
-    test_url = huge_data['data'][0]['images']['standard_resolution']['url']
-
-    # I need to set up a for loop that loops over the huge_data dictionary 
-    # and gets the data for each individual image in the response list
-    
+    # For loop that loops over the huge_data[data] dictionary 
+    # and gets urls for each image in the response list and puts them in urls[]
     urls = []
 
     for i in huge_data['data']:
         image_url = i['images']['thumbnail']['url']
         # print image_url
         urls.append(image_url)
-        # print "URLS"
         # print urls
 
-# want to get to the user's 
+    for i in huge_data['data']:
+        caption_time = i['caption']['created_time']
+        print caption_time
+
+
         # "data": 
             # user": {"username": "kelly4strength", 
                 # "profile_picture": "https://scontent.cdninstagram.com/t51.2885-19/10865062_1630836193858815_1047750309_a.jpg", 
