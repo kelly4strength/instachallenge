@@ -51,37 +51,37 @@ def show_results():
     
     # use the python requests library to call the endpoint URL and get the data (type(r)='requests.models.Response')
     r = requests.get(endpoint)
+# print r.status_code(look this up)
     
     # set the response to json (dict)
     huge_data = r.json()
 
     # test_url work but only gets you the url at index [0]
+    #so I loop through huge_data['data'] for each index?
+
     test_url = huge_data['data'][0]['images']['standard_resolution']['url']
 
     # I need to set up a for loop that loops over the huge_data dictionary 
     # and gets the data for each individual image in the response list
     
-    # urls = []
-    # for i in test_url:
-    
+    urls = []
 
-    #     test_url = huge_data['data'][0]['images']['standard_resolution']['url']
-    #     urls.append(test_url)
-    # return urls
+    for i in huge_data['data']:
+        image_url = i['images']['thumbnail']['url']
+        # print image_url
+        urls.append(image_url)
+        # print "URLS"
+        # print urls
+
+# want to get to the user's 
+        # "data": 
+            # user": {"username": "kelly4strength", 
+                # "profile_picture": "https://scontent.cdninstagram.com/t51.2885-19/10865062_1630836193858815_1047750309_a.jpg", 
+                # "id": "1094228", "full_name": "Kelly Hoffer"
 
 
-# def get_item_choices(category_names):
-#     """pass categories into copied items"""
-#     categories = []
 
-#     for category_name in category_names:
-#         if category_name:
-#             category = Category.query.filter_by(category_name=category_name).one()
-#             category_id = category.category_id   
-#             categories.append(category_id)
-#     return categories
-
-    return render_template ("results.html", tag=tag, test_url=test_url)
+    return render_template ("results.html", tag=tag, urls=urls, image_url=image_url)
  
 if __name__ == "__main__":
 

@@ -1,18 +1,20 @@
-<!-- NOT NEEDED YET - right now just redirecting to API data -->
-
 
 {% extends 'base.html' %}
 {% block content %}
 
 <div class="list-details col-xs-offset-2">
-  <div class="well">
+  
     <h2>Results</h2>
     <br>
       <div class="form-group">
-Here are the results for hashtag search: {{ tag }}
-<a href="{{ test_url }}">
-  <img src="{{ test_url }}"/>
-</a>
+        Here are the results for hashtag search: {{ tag }}
 
+        <div class="form-group">
+          {% for url in urls %}
+            <p><a href="{{ url }}"><img src="{{ url }}"/></a><p>
+          {% endfor %}
+        </div>
+      </div>
       </div>
 {% endblock %}
+
