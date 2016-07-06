@@ -21,7 +21,7 @@ class Search(db.Model):
     def __repr__(self):
         """Provide helpful representation when printed."""
 
-        return "<Search search_id=%s tag=%s start_date=%s end_date=%s urls=%s>" % (self.search_id, self.tag, self.start_date, self.end_date, self.urls)
+        return "<Search search_id=%s tag=%s start_date=%s end_date=%s urls=%s>" % (self.search_id, self.tag, self.start_date, self.end_date, self.url)
 
 
 # ##############################################################################
