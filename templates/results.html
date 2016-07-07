@@ -3,18 +3,17 @@
 {% block content %}
 
 <div class="list-details col-xs-offset-2">
-  
     <h2>Results</h2>
     <br>
       <div class="form-group">
         Here are the results for hashtag search: {{ tag }}
+          <div class="form-group">
+            {% for url in urls %}
+              <p><a href="{{ url }}"><img src="{{ url }}"/></a><p>
+            {% endfor %}
+          </div>
+      </div>
+</div>
 
-        <div class="form-group">
-          {% for url in urls %}
-            <p><a href="{{ url }}"><img src="{{ url }}"/></a><p>
-          {% endfor %}
-        </div>
-      </div>
-      </div>
 {% endblock %}
 

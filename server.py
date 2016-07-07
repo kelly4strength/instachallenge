@@ -17,7 +17,6 @@ import requests
 import json
 
 import datetime
-# from instagram import client, subscriptions
 
 app = Flask(__name__)
 
@@ -50,62 +49,43 @@ def show_results():
     db.session.add(new_search)
     db.session.commit()
 
-    # urls = get_endpoint_data(tag)
-
-        # concatenate the endpoint url and given hashtag to construct the url
+    # concatenate the endpoint url and given hashtag to construct the url
     endpoint = "https://api.instagram.com/v1/tags/" + tag + "/media/recent?access_token=272855367.b6f7db4.27aee70b486a4fd7b1b5546c1da0453d"
         
-        # use the python requests library to call the endpoint URL and get the data (type(r)='requests.models.Response')
+    # use the python requests library to call the endpoint URL and get the data (type(r)='requests.models.Response')
     r = requests.get(endpoint)
         
-        # Confirming response is good (200)
+    # Confirming response is good (200)
     print r.status_code
         
-        # set the response to json (dict)
+    # set the response to json (dict)
     huge_data = r.json()
 
     # For loop that loops over the huge_data[data] dictionary 
     # and gets urls for each image in the response list and puts them in urls[]
-    
     urls = []
-
     for i in huge_data['data']:
         image_url = i['images']['thumbnail']['url']
-        print image_url
+        # print image_url
         caption_time = i['caption']['created_time']
         # print caption_time
+
         caption_datetime = (datetime.datetime.fromtimestamp(int(caption_time)).strftime('%Y-%m-%d %H:%M:%S'))
-        caption_datetime_too = (datetime.datetime.strptime(caption_datetime,'%Y-%m-%d %H:%M:%S'))
         # print "caption_datetime"
         # print caption_datetime
         # print type(caption_datetime)
 
+        caption_datetime_too = (datetime.datetime.strptime(caption_datetime,'%Y-%m-%d %H:%M:%S'))
         # print caption_datetime_too
         # print type(caption_datetime_too)
 
-        start_date = new_search.start_date
-        print "start_date"
-        print type(start_date)
-        end_date = new_search.end_date
-        print end_date
-
-        if new_search.start_date <= caption_datetime_too >= new_search.end_date:
-        # 2016-07-03 <= 2016-06-30 20:53:03 >=2016-07-05
-
+        # if caption_time is between start_date and end_date, add image urls to urls
+       
+        if new_search.start_date <= caption_datetime_too <= new_search.end_date:
             urls.append(image_url)
+            print "urls"
             print urls
-        # return urls
-
-
-    # if caption_time is between start_date and end_date
-    # then include these images in the response data
-
-    # "data": 
-        # user": {"username": "kelly4strength", 
-            # "profile_picture": "https://scontent.cdninstagram.com/t51.2885-19/10865062_1630836193858815_1047750309_a.jpg", 
-            # "id": "1094228", "full_name": "Kelly Hoffer"
-
-
+    # return urls
 
     return render_template ("results.html", tag=tag, urls=urls)
  
@@ -120,7 +100,9 @@ if __name__ == "__main__":
 
     app.run()
 
+     # urls = get_endpoint_data(tag)
 
-
-
-
+    # "data": 
+        # user": {"username": "kelly4strength", 
+            # "profile_picture": "https://scontent.cdninstagram.com/t51.2885-19/10865062_1630836193858815_1047750309_a.jpg", 
+            # "id": "1094228", "full_name": "Kelly Hoffer"
