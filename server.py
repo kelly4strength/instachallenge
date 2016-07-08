@@ -29,6 +29,9 @@ app.jinja_env.undefined = StrictUndefined
 @app.route('/')
 def index():
     """landing page where user can input tag for search"""
+
+    # session.clear()
+    # print session
     
     return render_template ("form.html")
 
@@ -37,17 +40,21 @@ def index():
 def show_results():
     """shows the results from the instagram endpoint url made with the inputted tag"""
 
+    # Take in start and end dates from users and turn them into datetime > happens in the db
     tag = request.form.get("tag")
     start_date = request.form.get("start_date")
     end_date = request.form.get("end_date")
-    # Take in start and end dates from users and turn them into datetime > happens in the db!
-    
+
     # adding search parameters to instas db
     new_search = Search(tag=tag,
                     start_date=start_date, 
                     end_date=end_date)
     db.session.add(new_search)
     db.session.commit()
+
+    search_id = session['current_search'] = new_search.search_id
+    # print session
+    # print search_id
 
     # concatenate the endpoint url and given hashtag to construct the url
     endpoint = "https://api.instagram.com/v1/tags/" + tag + "/media/recent?access_token=272855367.b6f7db4.27aee70b486a4fd7b1b5546c1da0453d"
@@ -85,8 +92,14 @@ def show_results():
             urls.append(image_url)
             print "urls"
             print urls
-    # return urls
 
+        new_urls = Result(search_id=search_id,
+                        urls=urls)
+        db.session.add(new_urls)
+        db.session.commit()
+
+    session.clear()
+    print session
     return render_template ("results.html", tag=tag, urls=urls)
  
 if __name__ == "__main__":
