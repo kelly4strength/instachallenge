@@ -8,7 +8,8 @@ from flask import Flask, render_template, request, flash, redirect, session
 
 from flask_debugtoolbar import DebugToolbarExtension
 
-from model import connect_to_db, db, Search, Result
+from model import connect_to_db, db, Search
+# Result
  
 # from helper import get_endpoint_data
 
@@ -53,8 +54,8 @@ def show_results():
     db.session.commit()
 
     search_id = session['current_search'] = new_search.search_id
-    # print session
-    # print search_id
+    print session
+    print search_id
 
     # concatenate the endpoint url and given hashtag to construct the url
     endpoint = "https://api.instagram.com/v1/tags/" + tag + "/media/recent?access_token=272855367.b6f7db4.27aee70b486a4fd7b1b5546c1da0453d"
@@ -86,20 +87,19 @@ def show_results():
         # print caption_datetime_too
         # print type(caption_datetime_too)
 
-        # if caption_time is between start_date and end_date, add image urls to urls
-       
+        # if caption_time is between start_date and end_date, add image urls to urls list
         if new_search.start_date <= caption_datetime_too <= new_search.end_date:
             urls.append(image_url)
             print "urls"
             print urls
 
-        new_urls = Result(search_id=search_id,
-                        urls=urls)
-        db.session.add(new_urls)
-        db.session.commit()
+    update = Search.query.filter_by(search_id=search_id).first()
+    update.urls=urls
+    db.session.commit()
 
-    session.clear()
-    print session
+    # session.clear()
+    # print session
+
     return render_template ("results.html", tag=tag, urls=urls)
  
 if __name__ == "__main__":

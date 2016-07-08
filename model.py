@@ -16,28 +16,29 @@ class Search(db.Model):
     tag = db.Column(db.String(164), nullable=True)
     start_date = db.Column(db.DateTime, nullable=True)
     end_date =db.Column(db.DateTime, nullable=True)
-
-    def __repr__(self):
-        """Provide helpful representation when printed."""
-
-        return "<Search search_id=%s tag=%s start_date=%s end_date=%s>" % (self.search_id, self.tag, self.start_date, self.end_date)
-
-class Result(db.Model):
-    """search data for instachallenge"""
-
-    __tablename__ = "results"
-
-    result_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    search_id = db.Column(db.Integer, db.ForeignKey('searches.search_id'))
     urls = db.Column(db.String, nullable=True)
 
-    # Setting up table relationships
-    search = db.relationship('Search')
-
     def __repr__(self):
         """Provide helpful representation when printed."""
 
-        return "<Result result_id=%s search_id=%s urls=%s>" % (self.result_id, self.search_id, self.urls)
+        return "<Search search_id=%s tag=%s start_date=%s end_date=%s urls=%s>" % (self.search_id, self.tag, self.start_date, self.end_date, self.urls)
+
+# class Result(db.Model):
+#     """search data for instachallenge"""
+
+#     __tablename__ = "results"
+
+#     result_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+#     search_id = db.Column(db.Integer, db.ForeignKey('searches.search_id'))
+#     urls = db.Column(db.String, nullable=True)
+
+#     # Setting up table relationships
+#     search = db.relationship('Search')
+
+#     def __repr__(self):
+#         """Provide helpful representation when printed."""
+
+#         return "<Result result_id=%s search_id=%s urls=%s>" % (self.result_id, self.search_id, self.urls)
 
 # ##############################################################################
 
