@@ -8,7 +8,7 @@ from flask import Flask, render_template, request, flash, redirect, session
 
 from flask_debugtoolbar import DebugToolbarExtension
 
-from model import connect_to_db, db, Search
+from model import connect_to_db, db, Search, Result
  
 # from helper import get_endpoint_data
 
